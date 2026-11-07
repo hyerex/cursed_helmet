@@ -1,0 +1,11 @@
+{
+  "Title": "Cool Glasses",
+  "Description": "Fun mod: pilots wear a realistic head with aviator sunglasses instead of a helmet. Lowering the visor flips the glasses down onto the eyes, raising it pushes them back up onto the head.",
+  "PreviewImageUrl": "",
+  "MetaData": {
+    "DllName": "CoolGlasses.dll",
+    "AllowLoadOnStart": true,
+    "ShowOnMainList": true,
+    "DllHash": ""
+  }
+}

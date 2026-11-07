@@ -1,0 +1,18 @@
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+
+# Personal head scans: real people's faces. Never commit them to a public repository.
+Assets/head*.bin
+Assets/head*.jpg
+Assets/heads/
+*.glb
+*.gltf
+*.fbx
+*.blend
+*.blend1
+
+# Settings written by the mod at runtime
+*.cfg

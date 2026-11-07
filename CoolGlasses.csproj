@@ -1,0 +1,73 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Library</OutputType>
+    <LangVersion>latest</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>CoolGlasses</AssemblyName>
+    <RootNamespace>CoolGlasses</RootNamespace>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <!-- Another install folder: dotnet build -p:VTOLDir="D:/Games/VTOL VR" (or set a VTOLDir environment variable) -->
+    <VTOLDir Condition="'$(VTOLDir)' == ''">C:/Program Files (x86)/Steam/steamapps/common/VTOL VR</VTOLDir>
+    <GameManaged>$(VTOLDir)/VTOLVR_Data/Managed</GameManaged>
+    <LoaderManaged>$(VTOLDir)/Managed</LoaderManaged>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GameManaged)/Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ModLoader.Framework">
+      <HintPath>$(LoaderManaged)/ModLoader.Framework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(GameManaged)/UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GameManaged)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(GameManaged)/UnityEngine.AnimationModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(GameManaged)/UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(GameManaged)/UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tools\**" />
+    <None Remove="Tools\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The glasses' model, made from glasses.fbx by HelmetLivery\Tools\glasses\prepare_glasses.py -->
+    <EmbeddedResource Include="Assets\glasses.bin" LogicalName="CoolGlasses.Glasses.bin" />
+    <!-- The head's model and textures, made from your own .glb by Tools\prepare_head.py. They are
+         personal scans and not in the repository: without them the mod builds and shows glasses only. -->
+    <EmbeddedResource Include="Assets\head.bin" LogicalName="CoolGlasses.Head.bin" Condition="Exists('Assets\head.bin')" />
+    <EmbeddedResource Include="Assets\head_color.jpg" LogicalName="CoolGlasses.HeadColor.jpg" Condition="Exists('Assets\head_color.jpg')" />
+    <EmbeddedResource Include="Assets\head_normal.jpg" LogicalName="CoolGlasses.HeadNormal.jpg" Condition="Exists('Assets\head_normal.jpg')" />
+    <EmbeddedResource Include="Assets\head_ao.jpg" LogicalName="CoolGlasses.HeadAO.jpg" Condition="Exists('Assets\head_ao.jpg')" />
+  </ItemGroup>
+
+  <!-- Deploy to the Mod Loader's local mods folder: VTOL VR\@Mod Loader\Mods\<ModName>\ -->
+  <PropertyGroup>
+    <ModDeployDir>$(VTOLDir)/@Mod Loader/Mods/$(AssemblyName)</ModDeployDir>
+  </PropertyGroup>
+  <Target Name="DeployMod" AfterTargets="Build">
+    <MakeDir Directories="$(ModDeployDir)" />
+    <Copy SourceFiles="$(TargetPath);$(ProjectDir)item.json" DestinationFolder="$(ModDeployDir)" />
+    <Message Importance="high" Text="Deployed $(TargetName) to $(ModDeployDir)" />
+  </Target>
+</Project>
