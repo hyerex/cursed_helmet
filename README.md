@@ -1,85 +1,86 @@
 # Cool Glasses – VTOL VR Mod
 
-Ein Spaß-Mod für [VTOL VR](https://store.steampowered.com/app/667970/VTOL_VR/): Der Standard-Pilotenhelm
-wird durch einen **fotogescannten 3D-Kopf** mit einer **Aviator-Sonnenbrille** ersetzt.
+A fun mod for [VTOL VR](https://store.steampowered.com/app/667970/VTOL_VR/). It replaces the standard
+pilot helmet with a **photo-scanned 3D head** wearing **aviator sunglasses**.
 
-- **Visier runter:** Die Brille klappt auf die Augen.
-- **Visier hoch:** Die Brille wird auf den Kopf geschoben.
-- Das gilt für alle Piloten mit dem Standardhelm (du, KI, andere Spieler), aber **nur in deinem eigenen Spiel**.
-  Der Mod sendet nichts übers Netzwerk. Der Visierzustand kommt aus dem Spiel selbst.
-- In deiner eigenen VR-Sicht sind Kopf und Brille ausgeblendet. Du siehst weiter das normale Visier.
-- Der F-45-Helm (F-45A, Helikopter) wird nicht ersetzt.
+- **Visor down:** the glasses flip down onto the eyes.
+- **Visor up:** the glasses are pushed up onto the head.
+- This applies to every pilot wearing the standard helmet (you, AI and other players), but **only in your
+  own game**. The mod sends nothing over the network. The visor state comes from the game itself.
+- Your own VR view hides the head and glasses, so you still see the normal visor.
+- The F-45 helmet (F-45A, helicopters) is not replaced.
 
-> **Dieses Repo ist eine Vorlage.** Die Kopf-Scans sind **nicht** enthalten, weil es echte Gesichter
-> sind. Ohne Scan baut der Mod trotzdem und zeigt nur die Brille. Wie du deine eigenen Köpfe einbaust,
-> steht in [Prompt/Hand-off.md](Prompt/Hand-off.md). Die Anleitung ist für die Arbeit mit Claude Code geschrieben.
+> **This repo is a template.** The head scans are **not** included because they are real people's
+> faces. Without a scan the mod still builds and shows only the glasses. To add your own heads, see
+> [Prompt/Hand-off.md](Prompt/Hand-off.md), a step-by-step guide written for working with Claude Code.
 
-## Voraussetzungen
+## Requirements
 
-| Was | Wofür |
+| What | Why |
 |---|---|
-| VTOL VR + **VTOL VR Mod Loader** (Steam) | Spiel und Mod-Loader, die DLLs werden gegen die Spiel-DLLs gebaut |
-| [.NET SDK](https://dotnet.microsoft.com/download) (8 oder neuer) | Bauen (`dotnet build`, Ziel ist net472) |
-| [Blender](https://www.blender.org/) 4.x / 5.x | Kopf-Scan (.glb) in das Mod-Format umwandeln |
-| optional: `dotnet tool install -g ilspycmd` | Spielcode dekompilieren, um nachzusehen, wie etwas im Spiel heißt |
+| VTOL VR + **VTOL VR Mod Loader** (Steam) | The game and the mod loader. The DLL is built against the game's DLLs |
+| [.NET SDK](https://dotnet.microsoft.com/download) (8 or newer) | Building (`dotnet build`, targets net472) |
+| [Blender](https://www.blender.org/) 4.x / 5.x | Converting a head scan (.glb) into the mod's format |
+| optional: `dotnet tool install -g ilspycmd` | Decompiling the game's code to look up what something is called in the game |
 
-## Bauen
+## Building
 
 ```bash
 dotnet build -c Release
 ```
 
-Der Build kopiert `CoolGlasses.dll` und `item.json` automatisch nach
-`VTOL VR\@Mod Loader\Mods\CoolGlasses\`. Ist VTOL VR woanders installiert:
+The build automatically copies `CoolGlasses.dll` and `item.json` to
+`VTOL VR\@Mod Loader\Mods\CoolGlasses\`. If VTOL VR is installed somewhere else:
 
 ```bash
 dotnet build -c Release -p:VTOLDir="D:/SteamLibrary/steamapps/common/VTOL VR"
 ```
 
-Danach im Spiel unter **Mods** den Mod laden.
+Then load the mod in the game under **Mods**.
 
-## Einen Kopf einbauen
+## Adding a head
 
-1. Einen Kopf scannen, z. B. mit einer Handy-App wie Polycam, KIRI Engine oder RealityScan, und als
-   **.glb mit Texturen** exportieren. Am besten nur Kopf und Hals.
-2. Umwandeln (schreibt `Assets/head.bin` und `Assets/head_color/normal/ao.jpg`):
+1. Scan a head, for example with a phone app such as Polycam, KIRI Engine or RealityScan, and export
+   it as a **.glb with textures**. Head and neck only works best.
+2. Convert it. This writes `Assets/head.bin` and `Assets/head_color/normal/ao.jpg`:
 
    ```bash
-   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup -P Tools/prepare_head.py -- "C:/pfad/kopf.glb" Assets 2048
+   "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup -P Tools/prepare_head.py -- "C:/path/head.glb" Assets 2048
    ```
 
-3. Neu bauen und im Spiel mit den Tasten unten einpassen.
+3. Rebuild, then fit the head in the game with the keys below.
 
-## Tasten im Spiel (zum Einpassen)
+## In-game keys (for fitting)
 
-Alle Werte werden automatisch in `coolglasses.cfg` neben der DLL gespeichert. **Shift** = feine Schritte.
+All values are saved automatically to `coolglasses.cfg` next to the DLL. Hold **Shift** for fine steps.
 
-| Taste | Brille (ohne Strg) | Kopf (mit **Strg**) |
+| Key | Glasses (without Ctrl) | Head (with **Ctrl**) |
 |---|---|---|
-| I / K | höher / tiefer | höher / tiefer |
-| U / O | vor / zurück | vor / zurück |
-| L / J | größer / kleiner | größer / kleiner |
-| N / M | neigen | drehen |
-| Y / H | wie weit sie hochklappt | kippen |
-| T / G | wie hoch sie hochgeklappt sitzt | rechts / links |
-| B | – | Vierteldrehung |
-| P | Werte ins Log | Werte ins Log |
+| I / K | higher / lower | higher / lower |
+| U / O | forward / back | forward / back |
+| L / J | larger / smaller | larger / smaller |
+| N / M | tilt | turn |
+| Y / H | how far they flip up | pitch |
+| T / G | how high they sit when flipped up | right / left |
+| B | – | quarter turn |
+| P | write values to the log | write values to the log |
 
-Log: `%USERPROFILE%\AppData\LocalLow\Boundless Dynamics, LLC\VTOLVR\Player.log` (Einträge mit `[CoolGlasses]`).
+The log is `%USERPROFILE%\AppData\LocalLow\Boundless Dynamics, LLC\VTOLVR\Player.log` (lines starting
+with `[CoolGlasses]`).
 
-## Projektaufbau
+## Project layout
 
-| Datei | Inhalt |
+| File | Contents |
 |---|---|
-| `Main.cs` | Einstieg für den Mod-Loader (`[ItemId]`), legt das Host-Objekt an |
-| `GlassesHost.cs` | Sucht Helme, lädt Modelle und Texturen, Tasten, `coolglasses.cfg` |
-| `HeadGlasses.cs` | Pro Helm: Helm ausblenden, Kopf und Brille platzieren, Visier auslesen |
-| `Tools/prepare_head.py` | Blender-Skript: .glb → `head.bin` und Texturen |
-| `Assets/glasses.bin` | Das Brillenmodell |
-| `item.json` | Name und Beschreibung für den Mod-Loader |
+| `Main.cs` | Mod loader entry point (`[ItemId]`). Creates the host object |
+| `GlassesHost.cs` | Finds helmets, loads models and textures, handles keys and `coolglasses.cfg` |
+| `HeadGlasses.cs` | Per helmet: hides the helmet, places the head and glasses, reads the visor |
+| `Tools/prepare_head.py` | Blender script that converts a .glb into `head.bin` and textures |
+| `Assets/glasses.bin` | The glasses model |
+| `item.json` | Name and description for the mod loader |
 
-## Datenschutz
+## Privacy
 
-Kopf-Scans sind biometrische Daten echter Menschen. Scanne nur Leute, die einverstanden sind, und
-lade die Scans **nicht** in ein öffentliches Repo oder in den Steam Workshop. Die `.gitignore` hält
-`Assets/head*`, `*.glb`, `*.fbx` und `*.blend` deshalb aus Git heraus.
+Head scans are biometric data of real people. Only scan people who agree to it, and **don't** upload
+the scans to a public repo or the Steam Workshop. That's why the `.gitignore` keeps `Assets/head*`,
+`*.glb`, `*.fbx` and `*.blend` out of Git.
